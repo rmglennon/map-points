@@ -1,18 +1,40 @@
-var map = L.map("map").setView([37.75, -122.23], 10);
+var map = L.map("map").setView([39.74739, -105], 13);
 
 L.esri.basemapLayer("Topographic").addTo(map);
 
-var marker = L.marker([37.7814318,-122.4030528,]).addTo(map);
+var coorsField = {
+    "type": "Feature",
+    "properties": {
+        "popupContent": "Hello"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [-104.99404191970824, 39.756213909328125]
+    }
+};
 
-marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+//marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
-var popup = L.popup();
+var geojsonMarkerOptions = {
+    radius: 12,
+    fillColor: "#ff69b4",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
 
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(map);
+
+function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties.popupContent) {
+        layer.bindPopup(feature.properties.popupContent);
+    }
 }
 
-map.on('click', onMapClick);
+L.geoJSON(coorsField, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+    },
+    onEachFeature: onEachFeature
+}).addTo(map);
