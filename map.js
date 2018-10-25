@@ -36,6 +36,22 @@ function onMapClick(e) {
     marker
         .setLatLng(e.latlng)
         .addTo(map);
+
+    // non-working attempts to do a post request with latlng    
+    // var data = {
+    //     lat: e.latlng.lat,
+    //     lng: e.latlng.lng
+    // }
+
+    // $.ajax({
+    //     type: "POST",
+    //     url: "point-map.geojson",
+    //     data: data,
+    //     success: function() {
+    //         console.log("posted some data")
+    //     },
+    //     dataType: "json"
+    //   });
 }
 
 map.on('click', onMapClick);
